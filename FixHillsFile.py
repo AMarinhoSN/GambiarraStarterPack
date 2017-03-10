@@ -3,14 +3,17 @@
  >> Gambiarra Toolkit Starter Pack <<
 	Plumed Package
 
-This script was written to fix common problems find on HILLS file processing.
+A script written to fix unusual characteres "\x0" on HILLS file, probably added by the servants of the Besta Fera (a legendary supernatural entity that haunt PhD students working on theoretical and computational oriented projects report for decades).
+USAGE: python FixHillsFile.py 
+
 Author: AMarinhoSN
 '''
+from sys import argv
 
-hills_path_in = "/home/antonio/Docbox/E1/NewMetad/18/HILLS_to_fix_2"
+hills_path_in = argv[1]
 f_hills_in = open(hills_path_in,"r")
 
-hills_path_out = "/home/antonio/Docbox/E1/NewMetad/18/HILLS_fixed_2"
+hills_path_out = argv[1]+"_fixed"
 f_hills_out = open(hills_path_out,"w")
 
 for line in f_hills_in:
