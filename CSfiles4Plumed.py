@@ -1,4 +1,4 @@
-__author__ = AMarinhoSN
+__author__ = "AMarinhoSN"
 
 '''
 CS_4Plumed.py
@@ -8,11 +8,14 @@ restrained metadynamic simulations using Gromacs+Plumed based on a standard
 file available at BMRB.
 
 '''
-import numpy as np
 from sys import argv
 
 #===| LOAD DATA |===*
-bmrb_cshift_f = argv[1]
+try: 
+    bmrb_cshift_f = argv[1]
+except:
+    print "ERROR: you do not specify input file"
+    
 scr_cshift_file = open(bmrb_cshift_f,'r')
 
 #---| Create the individual *shift.dat files for Plumed |---#
@@ -32,29 +35,32 @@ for line in scr_cshift_file:
         continue
     else:
         try:
-             line_n = int(line[0:9])
-             res_i = int(line[18:21])
-             atom = line[30]
-             cs = float(line[35:42])
-             atom_type = line[26:28].replace(" ","")
-             
-             if atom_type == 'C':
-                 print res_i
+            
+            print line[18:22]
+            line_n = int(line[0:9])
+            res_i = int(line[18:21])
+            atom = line[30]
+            cs = float(line[35:42])
+            atom_type = line[26:28].replace(" ","")
+            
+            print res_i
+
+            if atom_type == 'C':
                  Cshift_f.write(str(res_i)+'\t'+str(cs)+'\n')
                  continue
-             if atom_type == 'CA':
+            if atom_type == 'CA':
                  CAshift_f.write(str(res_i)+'\t'+str(cs)+'\n')
                  continue
-             if atom_type == 'CB':
+            if atom_type == 'CB':
                  CBshift_f.write(str(res_i)+'\t'+str(cs)+'\n')
                  continue
-             if atom_type == 'H':
+            if atom_type == 'H':
                  Hshift_f.write(str(res_i)+'\t'+str(cs)+'\n')
                  continue
-             if atom_type == 'HA':
+            if atom_type == 'HA':
                  HAshift_f.write(str(res_i)+'\t'+str(cs)+'\n')
                  continue
-             if atom_type == 'N':
+            if atom_type == 'N':
                  Nshift_f.write(str(res_i)+'\t'+str(cs)+'\n')
                  continue
         except:
