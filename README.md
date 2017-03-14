@@ -7,7 +7,7 @@ I must warning you all that all scripts on this project were designed following 
 Author: AMarinhoSN 
 
 Requirements:
-	python2.7
+	- Python2.7
 
 Scripts:
 
