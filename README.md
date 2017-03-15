@@ -19,7 +19,7 @@ Scripts:
 		
 		TO DO: Use the actual PDB file to get correspondence of CS and simulated system. 
 
-	- FixHillsFile.py: Fix unusual characteres "\x0" on HILLS file, probably added by the servants of the Besta Fera (a legendary supernatural entity that haunt PhD students working on theoretical and computational oriented projects report for decades on several countries).
+	- FixHillsFile.py: Fix unusual characteres "\x0" on HILLS file, probably added by the servants of the Besta Fera (a legendary supernatural entity that haunt PhD students working on theoretical and computational oriented projects, there are decades of reports on this subject all around the world).
 
 		USAGE: python FixHillsFile.py
 		
