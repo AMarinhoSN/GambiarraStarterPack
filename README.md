@@ -1,6 +1,6 @@
 # GambiarraStarterPack
 
-The GambiarraStarterPack is a collection of scripts designed to solve common problems on daily tasks related to Molecular Biophysics projects that I am working on.
+The GambiarraStarterPack is a collection of scripts designed to solve common problems on daily tasks related to biomolecular physics projects that I am working on.
 If you find anything that could be usefull for your own selfish desires, feel free to use any script here.
 I must warning you all that all scripts on this project were designed following the great Gambiarra School of Coding, therefore all scripts are working but sometimes they don't and we can't explain how. Sometimes they work and we also can't explain how. Only the initiated on the Gambiarra Honor Code should use it, but feel free to try by yourself.
 
