@@ -4,6 +4,10 @@ __author__ = "AMarinhoSN"
 Define classes of NMR data
 
 '''
+import os
+
+script_dir = os.path.dirname(os.path.realpath(__file__))
+c_working_dir = os.getcwd()
 
 class CSdata:
     "Class of Chemical Shift data obtained from a NMR-STAR v3.1"
@@ -18,12 +22,13 @@ class CSdata:
         """ Load data on NMR-STAR v3.1 source file """
         #print "|    > Loading CS data from ", self.src_file,"."
         
-        try: 
-            bmrb_cshift_f = self.src_file
-            scr_cshift_file = open(bmrb_cshift_f,'r')
-        except(IOError):
-            print "ERROR: the ", self.src_file, " was not found"
-            exit()
+        #try: 
+        bmrb_cshift_f = self.src_file
+        scr_cshift_file = open(bmrb_cshift_f,'r')
+        
+        #except(IOError):
+        #    print "ERROR: the ", self.src_file, " was not found"
+        #    exit()
         
         is_on_data = False
         for line in scr_cshift_file:
@@ -95,21 +100,23 @@ class CSdata:
 
         print "|        --> ", len(self.data), " chemical shift data found"
     
-    def writeCShiftDAT(self, list_of_res):
+    def writeCShiftDAT(self, res_i, res_f):
         ''' 
         Write cshift.dat files based on a NMR-STAR v3.1 file
         '''
-        
+        list_of_res = range(res_i, res_f)
+
         # 2 - Create *shift.dat
         print "| @ Writing *shift.dat"
-        Cshift_f = open('Cshift.dat', 'w')
-        CAshift_f = open('CAshift.dat', 'w')
-        CBshift_f = open('CBshift.dat', 'w')
-        HAshift_f = open('HAshift.dat', 'w')
-        Hshift_f = open('Hshift.dat', 'w')
-        Nshift_f = open('Nshift.dat','w')
+        Cshift_f = open(c_working_dir+"/data/"+'Cshift.dat', 'w')
+        CAshift_f = open(c_working_dir+"/data/"+'CAshift.dat', 'w')
+        CBshift_f = open(c_working_dir+"/data/"+'CBshift.dat', 'w')
+        HAshift_f = open(c_working_dir+"/data/"+'HAshift.dat', 'w')
+        Hshift_f = open(c_working_dir+"/data/"+'Hshift.dat', 'w')
+        Nshift_f = open(c_working_dir+"/data/"+'Nshift.dat','w')
 
         first_res = list_of_res[0]
+        final_res = list_of_res[-1]
 
         prev_res_C = first_res
         prev_res_CA = first_res
@@ -133,7 +140,7 @@ class CSdata:
         Absent_PDB_res = []
 
         if len(self.data) == 0:
-                print "| ERROR: no data stored, you should data before write cshift.dat files"
+                print "| ERROR: no data stored, you should check the source file."
     
         for cs in self.data:
 
@@ -142,10 +149,15 @@ class CSdata:
             #print cs['author_seq_id']
             curr_res = cs['author_seq_id']
 
+            # Check if the cs res is on the system:
+
             if curr_res < first_res:
                 Absent_PDB_res.append(curr_res)
                 continue
-
+            if curr_res > final_res:
+                Absent_PDB_res.append(curr_res)
+                continue
+            
             if cs['atom_id'] == "C":
                 Cshift_f.write(str(cs['author_seq_id'])+" "+str(cs['value'])+"\n")
                 #print cs['author_seq_id']," ",str(cs['value'])
