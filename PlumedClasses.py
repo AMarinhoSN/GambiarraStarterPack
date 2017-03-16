@@ -50,7 +50,7 @@ class CV:
             print "| ", (f+" " for f in cshift_files)
             print "| Assuming that those are all the files you need. "
 
-        # write cshift.dat files? 
+        # write cshift.dat files?
 
         if there_is_cshifdat == False:
             print "| No cshift.dat files were found on data dir: "
@@ -80,7 +80,7 @@ class CV:
                         CSobj = NMRdataClasses.CSdata("CSdata", bmrb_file)
                         CSobj.loadData()
                         valid_name = True
-                        
+
                         #except(IOError):
                            #print "| !! ERROR: the ", bmrb_file, " was not found. Try again."
 
@@ -91,7 +91,7 @@ class CV:
                         try:
                             res_i = int(raw_input("| "))
                             valid_entry = True
-                            
+
                         except(TypeError):
                             print "| ERROR: not a valid integer. Try again, looser."
                     print "| What is the final residue on PDB? "
@@ -122,7 +122,7 @@ class CV:
         dat_file.write("### SET CS as CV ###\n")
         dat_file.write("prot: GROUP ATOMS="+str(atoms_i)+"-"+str(atoms_f)+"\n")
         dat_file.write(self.name+": CS2BACKBONE ATOMS=prot DATA="+data_dir_nm+" NRES="+str(atoms_f-atoms_i)+" CAMSHIFT\n")
-        dat_file.write("PRINT ARG="+self.name+" FILE="+self.name+"STRIDE=10\n") #Should add the stride option
+        dat_file.write("PRINT ARG="+self.name+" FILE="+self.name+" STRIDE=10\n") #Should add the stride option
         dat_file.write("####################\n")
 
 class Simulation:

@@ -104,8 +104,9 @@ class CSdata:
         ''' 
         Write cshift.dat files based on a NMR-STAR v3.1 file
         '''
-        list_of_res = range(res_i, res_f)
-
+        list_of_res = range(res_i, res_f+1)
+        #print list_of_res
+        #print stop
         # 2 - Create *shift.dat
         print "| @ Writing *shift.dat"
         Cshift_f = open(c_working_dir+"/data/"+'Cshift.dat', 'w')
@@ -124,29 +125,29 @@ class CSdata:
         prev_res_H = first_res
         prev_res_HA = first_res
         prev_res_N = first_res
-
-        def writeNonAsgnedRes(curr_res, prev_res, Xcshift_file):
-            '''
-            Write non asigned res on file
-            '''
-            ### DEBUG ###
-            #print curr_res, " | ", prev_res
-            #############
-            res_gap = range(prev_res, curr_res)
-
-            for res in res_gap:
-                Xcshift_file.write(str(res)+" 0.00\n")
-
+        
         Absent_PDB_res = []
 
         if len(self.data) == 0:
                 print "| ERROR: no data stored, you should check the source file."
     
-        for cs in self.data:
+        C_asgnd_values =[]
+        C_asgnd_res =[]
+        CA_asgnd_values =[]
+        CA_asgnd_res =[]
+        CB_asgnd_values =[]
+        CB_asgnd_res =[]
+        HA_asgnd_values =[]
+        HA_asgnd_res =[]
+        H_asgnd_values =[]
+        H_asgnd_res =[]
+        N_asgnd_values =[]
+        N_asgnd_res =[]
 
-            #print cs['atom_id']
-            #print cs['value']
-            #print cs['author_seq_id']
+        # Get individual asingned data
+
+        for idx, cs in enumerate(self.data):
+
             curr_res = cs['author_seq_id']
 
             # Check if the cs res is on the system:
@@ -159,65 +160,53 @@ class CSdata:
                 continue
             
             if cs['atom_id'] == "C":
-                Cshift_f.write(str(cs['author_seq_id'])+" "+str(cs['value'])+"\n")
-                #print cs['author_seq_id']," ",str(cs['value'])
-                #get non asigned gap
-                if curr_res == prev_res_C+1:
-                    prev_res_C = curr_res
-                    continue
-                else:
-                    writeNonAsgnedRes(curr_res, prev_res_C, Cshift_f)
-                prev_res_C = curr_res
-
+                C_asgnd_values.append(cs['value'])
+                C_asgnd_res.append(cs["author_seq_id"])
             if cs['atom_id'] == "CA":
-                CAshift_f.write(str(cs['author_seq_id'])+" "+str(cs['value'])+"\n")
-                #get non asigned gap
-                if curr_res == prev_res_CA+1:
-                    prev_res_CA = curr_res
-                    continue
-                else:
-                    writeNonAsgnedRes(curr_res, prev_res_CA, CAshift_f)
+                CA_asgnd_values.append(cs['value'])
+                CA_asgnd_res.append(cs["author_seq_id"])
             
-                prev_res_CA = curr_res
-
             if cs['atom_id'] == "CB":
-                CBshift_f.write(str(cs['author_seq_id'])+" "+str(cs['value'])+"\n") 
-                if curr_res == prev_res_CB+1:
-                    prev_res_CB = curr_res
-                    continue
-                else:
-                    writeNonAsgnedRes(curr_res, prev_res_CB, CBshift_f)
-                prev_res_CB = curr_res
+                CB_asgnd_values.append(cs['value'])
+                CB_asgnd_res.append(cs["author_seq_id"])
+            
+            if cs['atom_id'] == "N":
+                N_asgnd_values.append(cs['value'])
+                N_asgnd_res.append(cs["author_seq_id"])
 
             if cs['atom_id'] == "H":
-                Hshift_f.write(str(cs['author_seq_id'])+" "+str(cs['value'])+"\n")
-                if curr_res == prev_res_H+1:
-                    prev_res_H = curr_res
-                    continue
-                else:
-                    writeNonAsgnedRes(curr_res, prev_res_H, Hshift_f)
-                prev_res_H = curr_res
- 
+                H_asgnd_values.append(cs['value'])
+                H_asgnd_res.append(cs["author_seq_id"])
+
             if cs['atom_id'] == "HA":
-                HAshift_f.write(str(cs['author_seq_id'])+" "+str(cs['value'])+"\n")
-                if curr_res == prev_res_HA+1:
-                    prev_res_HA = curr_res
-                    continue
-                else:
-                    writeNonAsgnedRes(curr_res, prev_res_HA, HAshift_f)
+                HA_asgnd_values.append(cs['value'])
+                HA_asgnd_res.append(cs["author_seq_id"])
+
+        def smartwrite(list_of_res, cshift_f, asgnd_res, asgnd_values):
+            '''
+            write CS and non CS residues 
+            '''
             
-                prev_res_HA = curr_res
- 
-            if cs['atom_id'] == "N":
-                Nshift_f.write(str(cs['author_seq_id'])+" "+str(cs['value'])+"\n")
-                if curr_res == prev_res_N+1:
-                    prev_res_N = curr_res
-                    continue
-                else:
-                    writeNonAsgnedRes(curr_res, prev_res_N, Nshift_f)
-                prev_res_N = curr_res
+            for res in list_of_res:
+                # if non asigned res
+                if res not in asgnd_res:
+                    cshift_f.write(str(res)+" 0.00\n")
+                # if asigned res
+                if res in asgnd_res:
+                    cs_idx = asgnd_res.index(res)
+                    cshift_f.write(str(res)+ " "+str(asgnd_values[cs_idx])+"\n")
+        
+        # write C data
+        
+        smartwrite(list_of_res, Cshift_f, C_asgnd_res,C_asgnd_values)
+        smartwrite(list_of_res, CAshift_f, CA_asgnd_res, CA_asgnd_values)
+        smartwrite(list_of_res, CBshift_f, CB_asgnd_res, CB_asgnd_values)
+        smartwrite(list_of_res, Nshift_f, N_asgnd_res, N_asgnd_values) 
+        smartwrite(list_of_res, Hshift_f, H_asgnd_res, H_asgnd_values)
+        smartwrite(list_of_res, HAshift_f,HA_asgnd_res, HA_asgnd_values)
 
         # 3 - Warning for absent residues on the PDB
+
         if len(Absent_PDB_res) > 0:
             print "| WARNING: ", len(Absent_PDB_res), " res have Chemical Shift data asigned but are absent on PDB file"
         # DONE
