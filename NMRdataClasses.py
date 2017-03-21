@@ -109,12 +109,12 @@ class CSdata:
         #print stop
         # 2 - Create *shift.dat
         print "| @ Writing *shift.dat"
-        Cshift_f = open(c_working_dir+"/data/"+'Cshift.dat', 'w')
-        CAshift_f = open(c_working_dir+"/data/"+'CAshift.dat', 'w')
-        CBshift_f = open(c_working_dir+"/data/"+'CBshift.dat', 'w')
-        HAshift_f = open(c_working_dir+"/data/"+'HAshift.dat', 'w')
-        Hshift_f = open(c_working_dir+"/data/"+'Hshift.dat', 'w')
-        Nshift_f = open(c_working_dir+"/data/"+'Nshift.dat','w')
+        Cshift_f = open(c_working_dir+"/data/"+'Cshifts.dat', 'w')
+        CAshift_f = open(c_working_dir+"/data/"+'CAshifts.dat', 'w')
+        CBshift_f = open(c_working_dir+"/data/"+'CBshifts.dat', 'w')
+        HAshift_f = open(c_working_dir+"/data/"+'HAshifts.dat', 'w')
+        Hshift_f = open(c_working_dir+"/data/"+'Hshifts.dat', 'w')
+        Nshift_f = open(c_working_dir+"/data/"+'Nshifts.dat','w')
 
         first_res = list_of_res[0]
         final_res = list_of_res[-1]
